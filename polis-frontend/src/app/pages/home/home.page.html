@@ -1,24 +1,31 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Polis University Management</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="navigateTo('home')">
-        <ion-icon name="home"></ion-icon>
-        <span>Home</span>
-      </ion-button>
-      <ion-button fill="clear" (click)="navigateTo('students')">
-        <ion-icon name="people"></ion-icon>
-        <span>Students</span>
-      </ion-button>
-      <ion-button fill="clear" (click)="navigateTo('teachers')">
-        <ion-icon name="person"></ion-icon>
-        <span>Teachers</span>
-      </ion-button>
-      <ion-button fill="clear" (click)="navigateTo('courses')">
-        <ion-icon name="library"></ion-icon>
-        <span>Courses</span>
-      </ion-button>
-    </ion-buttons>
+    <div class="header-content">
+      <div class="title-section">
+        <div class="polis-logo">
+          <img src="assets/Polis.png" alt="Polis University Logo">
+        </div>
+        <ion-title>Polis University Management</ion-title>
+      </div>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="navigateTo('home')">
+          <ion-icon name="home"></ion-icon>
+          <span>Home</span>
+        </ion-button>
+        <ion-button fill="clear" (click)="navigateTo('students')">
+          <ion-icon name="people"></ion-icon>
+          <span>Students</span>
+        </ion-button>
+        <ion-button fill="clear" (click)="navigateTo('teachers')">
+          <ion-icon name="person"></ion-icon>
+          <span>Teachers</span>
+        </ion-button>
+        <ion-button fill="clear" (click)="navigateTo('courses')">
+          <ion-icon name="library"></ion-icon>
+          <span>Courses</span>
+        </ion-button>
+      </ion-buttons>
+    </div>
   </ion-toolbar>
 </ion-header>
 
