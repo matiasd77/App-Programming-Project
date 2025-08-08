@@ -6,42 +6,213 @@
 
 ion-header {
   flex-shrink: 0;
+  
+  ion-toolbar {
+    --background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+
+    ion-title {
+      color: #333;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    ion-buttons ion-button {
+      --color: #43e97b;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        --background: rgba(67, 233, 123, 0.1);
+        transform: translateY(-1px);
+      }
+    }
+  }
 }
 
 ion-content {
   flex: 1;
+  --background: #f8f9fa;
+  --padding-top: 0;
+  --padding-bottom: 0;
 }
 
-ion-footer {
-  flex-shrink: 0;
+// Search Bar
+ion-searchbar {
+  --background: #ffffff;
+  --border-radius: 0.75rem;
+  --box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  --border: 1px solid #e0e0e0;
+  margin: 1rem;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --border: 1px solid #43e97b;
+  }
+
+  &::part(container) {
+    padding: 0.75rem 1rem;
+  }
+
+  &::part(searchbar-input) {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &::part(searchbar-icon) {
+    color: #43e97b;
+  }
+}
+
+// Course List
+ion-list {
+  padding: 0 1rem;
+  background: transparent;
 }
 
 ion-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
+  --background: #ffffff;
+  --border-radius: 0.75rem;
+  --padding-start: 1.5rem;
+  --padding-end: 1.5rem;
+  --padding-top: 1.25rem;
+  --padding-bottom: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+  }
+
+  &:focus-within {
+    border-color: #43e97b;
+    box-shadow: 0 0 0 2px rgba(67, 233, 123, 0.1);
+  }
+
+  // Radio Button Styling
+  ion-radio {
+    --color: #43e97b;
+    --color-checked: #43e97b;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+  }
+
+  ion-label {
+    h2 {
+      color: #333;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0.25rem 0;
+      line-height: 1.4;
+
+      &:first-of-type {
+        color: #43e97b;
+        font-weight: 500;
+      }
+    }
+  }
 }
 
-ion-checkbox {
-  margin-right: 12px;
-}
-
-ion-label h2 {
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-ion-label p {
-  margin: 2px 0;
-  color: var(--ion-color-medium);
-  font-size: 14px;
-}
-
+// Empty State
 .ion-padding {
   text-align: center;
-  color: var(--ion-color-medium);
+  color: #666;
+  padding: 2rem;
+  
+  p {
+    font-size: 1rem;
+    margin: 0;
+  }
 }
 
+// Loading State
 ion-spinner {
-  margin-right: 8px;
+  margin-right: 0.5rem;
+  color: #43e97b;
+}
+
+// Footer
+ion-footer {
+  flex-shrink: 0;
+  
+  ion-toolbar {
+    --background: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    padding: 1rem;
+  }
+}
+
+// Confirm Button
+ion-button {
+  --background: #43e97b;
+  --color: white;
+  --border-radius: 0.75rem;
+  --padding-start: 2rem;
+  --padding-end: 2rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
+
+  &:hover {
+    --background: #38f9d7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(67, 233, 123, 0.4);
+  }
+
+  &:disabled {
+    --background: #ccc;
+    --color: #666;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// Selected Course Highlight
+ion-item.item-selected {
+  border-color: #43e97b;
+  background: rgba(67, 233, 123, 0.05);
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.15);
+
+  ion-label h2 {
+    color: #43e97b;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  ion-searchbar {
+    margin: 0.75rem;
+  }
+
+  ion-list {
+    padding: 0 0.75rem;
+  }
+
+  ion-item {
+    --padding-start: 1.25rem;
+    --padding-end: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  ion-button {
+    font-size: 1rem;
+    --padding-start: 1.5rem;
+    --padding-end: 1.5rem;
+  }
 }
 
