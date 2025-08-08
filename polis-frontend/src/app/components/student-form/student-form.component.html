@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ isEditMode ? 'Edit Student' : 'Add Student' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">First Name *</ion-label>
+        <ion-input 
+          formControlName="firstName" 
+          placeholder="Enter first name">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="studentForm.get('firstName')?.invalid && studentForm.get('firstName')?.touched" class="error-message">
+        First name is required and must be at least 2 characters.
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Last Name *</ion-label>
+        <ion-input 
+          formControlName="lastName" 
+          placeholder="Enter last name">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="studentForm.get('lastName')?.invalid && studentForm.get('lastName')?.touched" class="error-message">
+        Last name is required and must be at least 2 characters.
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Email *</ion-label>
+        <ion-input 
+          formControlName="email" 
+          type="email" 
+          placeholder="Enter email">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="studentForm.get('email')?.invalid && studentForm.get('email')?.touched" class="error-message">
+        Please enter a valid email address.
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Phone</ion-label>
+        <ion-input 
+          formControlName="phone" 
+          type="tel" 
+          placeholder="Enter phone number">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="studentForm.invalid || isSubmitting">
+        <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+        {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update Student' : 'Add Student') }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

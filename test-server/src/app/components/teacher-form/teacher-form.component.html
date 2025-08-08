@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="teacherForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="stacked">First Name *</ion-label>
+      <ion-input 
+        formControlName="firstName" 
+        placeholder="Enter first name"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="teacherForm.get('firstName')?.invalid && teacherForm.get('firstName')?.touched">
+      <span *ngIf="teacherForm.get('firstName')?.errors?.['required']">First name is required</span>
+      <span *ngIf="teacherForm.get('firstName')?.errors?.['minlength']">First name must be at least 2 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Last Name *</ion-label>
+      <ion-input 
+        formControlName="lastName" 
+        placeholder="Enter last name"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="teacherForm.get('lastName')?.invalid && teacherForm.get('lastName')?.touched">
+      <span *ngIf="teacherForm.get('lastName')?.errors?.['required']">Last name is required</span>
+      <span *ngIf="teacherForm.get('lastName')?.errors?.['minlength']">Last name must be at least 2 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Title *</ion-label>
+      <ion-input 
+        formControlName="title" 
+        placeholder="Enter title (e.g., Professor, Lecturer)"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="teacherForm.get('title')?.invalid && teacherForm.get('title')?.touched">
+      <span *ngIf="teacherForm.get('title')?.errors?.['required']">Title is required</span>
+      <span *ngIf="teacherForm.get('title')?.errors?.['minlength']">Title must be at least 2 characters</span>
+    </div>
+
+    <div class="form-actions">
+      <ion-button 
+        type="submit" 
+        expand="block" 
+        [disabled]="teacherForm.invalid || isSubmitting">
+        <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+        {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Save') }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content> 

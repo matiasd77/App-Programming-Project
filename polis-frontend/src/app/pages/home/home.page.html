@@ -1,0 +1,202 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Polis University Management</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="navigateTo('home')">
+        <ion-icon name="home"></ion-icon>
+        <span>Home</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('students')">
+        <ion-icon name="people"></ion-icon>
+        <span>Students</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('teachers')">
+        <ion-icon name="person"></ion-icon>
+        <span>Teachers</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('courses')">
+        <ion-icon name="library"></ion-icon>
+        <span>Courses</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome to Polis University</h1>
+      <p class="hero-subtitle">
+        Manage students, teachers, and courses efficiently with our comprehensive university management system.
+      </p>
+      <div class="hero-actions">
+        <ion-button (click)="navigateTo('students')">
+          <ion-icon name="people"></ion-icon>
+          Manage Students
+        </ion-button>
+        <ion-button (click)="navigateTo('teachers')">
+          <ion-icon name="person"></ion-icon>
+          Manage Teachers
+        </ion-button>
+        <ion-button (click)="navigateTo('courses')">
+          <ion-icon name="library"></ion-icon>
+          Manage Courses
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions Section -->
+  <div class="quick-actions-section">
+    <h2 class="section-title">Quick Actions</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="3">
+          <div class="quick-action-card" (click)="navigateTo('students')">
+            <div class="action-icon students">
+              <ion-icon name="people"></ion-icon>
+            </div>
+            <h3>Add Student</h3>
+            <p>Register new students</p>
+          </div>
+        </ion-col>
+        <ion-col size="6" size-md="3">
+          <div class="quick-action-card" (click)="navigateTo('teachers')">
+            <div class="action-icon teachers">
+              <ion-icon name="person"></ion-icon>
+            </div>
+            <h3>Add Teacher</h3>
+            <p>Register new teachers</p>
+          </div>
+        </ion-col>
+        <ion-col size="6" size-md="3">
+          <div class="quick-action-card" (click)="navigateTo('courses')">
+            <div class="action-icon courses">
+              <ion-icon name="library"></ion-icon>
+            </div>
+            <h3>Add Course</h3>
+            <p>Create new courses</p>
+          </div>
+        </ion-col>
+        <ion-col size="6" size-md="3">
+          <div class="quick-action-card" (click)="navigateTo('courses')">
+            <div class="action-icon enrollments">
+              <ion-icon name="school"></ion-icon>
+            </div>
+            <h3>Assign Courses</h3>
+            <p>Link students to courses</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Navigation Section -->
+  <div class="navigation-section">
+    <h2 class="section-title">Management Modules</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="4">
+          <ion-card class="nav-card" (click)="navigateTo('students')">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="people"></ion-icon>
+                Students Management
+              </ion-card-title>
+              <ion-card-subtitle>Manage student information and enrollments</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Add, edit, and manage student records. View course enrollments and academic progress.</p>
+              <ion-button fill="clear">
+                Manage Students
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="12" size-md="4">
+          <ion-card class="nav-card" (click)="navigateTo('teachers')">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="person"></ion-icon>
+                Teachers Management
+              </ion-card-title>
+              <ion-card-subtitle>Manage faculty information and course assignments</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Add, edit, and manage teacher records. Assign courses and track teaching loads.</p>
+              <ion-button fill="clear">
+                Manage Teachers
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="12" size-md="4">
+          <ion-card class="nav-card" (click)="navigateTo('courses')">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="library"></ion-icon>
+                Courses Management
+              </ion-card-title>
+              <ion-card-subtitle>Manage course information and enrollments</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Create and manage courses. Assign teachers and track student enrollments.</p>
+              <ion-button fill="clear">
+                Manage Courses
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <h2 class="section-title">System Features</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="6">
+          <div class="feature-item">
+            <ion-icon name="search" class="feature-icon"></ion-icon>
+            <div class="feature-content">
+              <h3>Advanced Search</h3>
+              <p>Quickly find students, teachers, and courses with our powerful search functionality.</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-md="6">
+          <div class="feature-item">
+            <ion-icon name="sync" class="feature-icon"></ion-icon>
+            <div class="feature-content">
+              <h3>Real-time Updates</h3>
+              <p>All changes are synchronized in real-time across the entire system.</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-md="6">
+          <div class="feature-item">
+            <ion-icon name="shield-checkmark" class="feature-icon"></ion-icon>
+            <div class="feature-content">
+              <h3>Secure Data</h3>
+              <p>Your data is protected with industry-standard security measures.</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-md="6">
+          <div class="feature-item">
+            <ion-icon name="phone-portrait" class="feature-icon"></ion-icon>
+            <div class="feature-content">
+              <h3>Mobile Friendly</h3>
+              <p>Access the system from any device with our responsive design.</p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="stacked">First Name *</ion-label>
+      <ion-input 
+        formControlName="firstName" 
+        placeholder="Enter first name"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="studentForm.get('firstName')?.invalid && studentForm.get('firstName')?.touched">
+      <span *ngIf="studentForm.get('firstName')?.errors?.['required']">First name is required</span>
+      <span *ngIf="studentForm.get('firstName')?.errors?.['minlength']">First name must be at least 2 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Last Name *</ion-label>
+      <ion-input 
+        formControlName="lastName" 
+        placeholder="Enter last name"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="studentForm.get('lastName')?.invalid && studentForm.get('lastName')?.touched">
+      <span *ngIf="studentForm.get('lastName')?.errors?.['required']">Last name is required</span>
+      <span *ngIf="studentForm.get('lastName')?.errors?.['minlength']">Last name must be at least 2 characters</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Serial Number *</ion-label>
+      <ion-input 
+        formControlName="serialNumber" 
+        placeholder="Enter serial number"
+        type="text">
+      </ion-input>
+    </ion-item>
+    <div class="error-message" *ngIf="studentForm.get('serialNumber')?.invalid && studentForm.get('serialNumber')?.touched">
+      <span *ngIf="studentForm.get('serialNumber')?.errors?.['required']">Serial number is required</span>
+      <span *ngIf="studentForm.get('serialNumber')?.errors?.['minlength']">Serial number must be at least 3 characters</span>
+    </div>
+
+    <div class="form-actions">
+      <ion-button 
+        type="submit" 
+        expand="block" 
+        [disabled]="studentForm.invalid || isSubmitting">
+        <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+        {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Save') }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content> 

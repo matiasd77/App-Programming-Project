@@ -1,0 +1,11 @@
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: 8px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+ion-searchbar:focus-within {
+  --background: var(--ion-color-light-shade);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+} 

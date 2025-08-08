@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Courses</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    placeholder="Search courses..."
+    (ionInput)="onSearchChange($event)"
+    show-clear-button="focus"
+    animated="true">
+  </ion-searchbar>
+
+  <ion-list>
+    <ion-item *ngFor="let course of filteredCourses" button (click)="toggleCourse(course.id!)">
+      <ion-radio 
+        slot="start" 
+        [value]="course.id!"
+        (ionChange)="toggleCourse(course.id!)">
+      </ion-radio>
+      <ion-label>
+        <h2>{{ course.title }}</h2>
+        <p>{{ course.code }}</p>
+        <p *ngIf="course.description">{{ course.description }}</p>
+        <p *ngIf="course.year">Year: {{ course.year }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="filteredCourses.length === 0 && !isLoading" class="ion-padding">
+    <p>No courses found.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading courses...</p>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button 
+      expand="block" 
+      (click)="onConfirm()"
+      [disabled]="selectedCount === 0"
+      color="primary"
+      id="confirm-button">
+      Confirm ({{ selectedCount }} selected)
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

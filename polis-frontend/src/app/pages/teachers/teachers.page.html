@@ -1,0 +1,99 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Teachers</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="navigateTo('home')">
+        <ion-icon name="home"></ion-icon>
+        <span>Home</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('students')">
+        <ion-icon name="people"></ion-icon>
+        <span>Students</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('teachers')">
+        <ion-icon name="person"></ion-icon>
+        <span>Teachers</span>
+      </ion-button>
+      <ion-button fill="clear" (click)="navigateTo('courses')">
+        <ion-icon name="library"></ion-icon>
+        <span>Courses</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <app-search-bar 
+    placeholder="Search teachers..." 
+    (search)="onSearch($event)">
+  </app-search-bar>
+
+  <ion-list>
+    <ion-item *ngFor="let teacher of teachers" button (click)="openEditModal(teacher)">
+      <ion-label>
+        <h2>{{ teacher.firstName }} {{ teacher.lastName }}</h2>
+        <p>👨‍🏫 {{ teacher.title }}</p>
+        <p *ngIf="teacher.courses && teacher.courses.length > 0">
+          📚 {{ teacher.courses.length }} course{{ teacher.courses.length > 1 ? 's' : '' }}
+        </p>
+        <p *ngIf="!teacher.courses || teacher.courses.length === 0" class="no-courses">
+          📚 No courses assigned
+        </p>
+      </ion-label>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        color="primary"
+        (click)="openCourseModal(teacher); $event.stopPropagation()">
+        <ion-icon name="library"></ion-icon>
+      </ion-button>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        color="danger"
+        (click)="deleteTeacher(teacher); $event.stopPropagation()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more teachers...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<!-- Teacher Form Modal -->
+<ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+  <ng-template>
+    <app-teacher-form 
+      [teacher]="selectedTeacher"
+      (saved)="onTeacherSaved()"
+      (cancelled)="closeModal()">
+    </app-teacher-form>
+  </ng-template>
+</ion-modal>
+
+<!-- Course Selection Modal -->
+<ion-modal [isOpen]="isCourseModalOpen" (didDismiss)="closeCourseModal()">
+  <ng-template>
+    <app-course-selection
+      [selectedCourseIds]="getSelectedCourseIds()"
+      [studentId]="selectedTeacherForCourses?.id"
+      (coursesSelected)="onCoursesSelected($event)"
+      (cancelled)="closeCourseModal()">
+    </app-course-selection>
+  </ng-template>
+</ion-modal>

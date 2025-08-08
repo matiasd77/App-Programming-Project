@@ -1,0 +1,7 @@
+{
+  "name": "polis-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

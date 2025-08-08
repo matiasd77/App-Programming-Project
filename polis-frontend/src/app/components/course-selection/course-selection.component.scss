@@ -1,0 +1,47 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+ion-header {
+  flex-shrink: 0;
+}
+
+ion-content {
+  flex: 1;
+}
+
+ion-footer {
+  flex-shrink: 0;
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+ion-checkbox {
+  margin-right: 12px;
+}
+
+ion-label h2 {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+ion-label p {
+  margin: 2px 0;
+  color: var(--ion-color-medium);
+  font-size: 14px;
+}
+
+.ion-padding {
+  text-align: center;
+  color: var(--ion-color-medium);
+}
+
+ion-spinner {
+  margin-right: 8px;
+}
+

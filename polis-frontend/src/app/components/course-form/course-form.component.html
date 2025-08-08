@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ isEditMode ? 'Edit Course' : 'Add Course' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Course Title *</ion-label>
+        <ion-input 
+          formControlName="title" 
+          placeholder="Enter course title"
+          type="text">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched" class="error-message">
+        <span *ngIf="courseForm.get('title')?.errors?.['required']">Course title is required</span>
+        <span *ngIf="courseForm.get('title')?.errors?.['minlength']">Course title must be at least 2 characters</span>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Course Code *</ion-label>
+        <ion-input 
+          formControlName="code" 
+          placeholder="Enter course code (e.g., CS101)"
+          type="text">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="courseForm.get('code')?.invalid && courseForm.get('code')?.touched" class="error-message">
+        <span *ngIf="courseForm.get('code')?.errors?.['required']">Course code is required</span>
+        <span *ngIf="courseForm.get('code')?.errors?.['minlength']">Course code must be at least 2 characters</span>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-textarea 
+          formControlName="description" 
+          placeholder="Enter course description"
+          rows="3">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Year *</ion-label>
+        <ion-input 
+          formControlName="year" 
+          placeholder="Enter year"
+          type="number">
+        </ion-input>
+      </ion-item>
+      <div *ngIf="courseForm.get('year')?.invalid && courseForm.get('year')?.touched" class="error-message">
+        <span *ngIf="courseForm.get('year')?.errors?.['required']">Year is required</span>
+        <span *ngIf="courseForm.get('year')?.errors?.['min']">Year must be at least 2000</span>
+        <span *ngIf="courseForm.get('year')?.errors?.['max']">Year must be at most 2030</span>
+      </div>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button 
+        type="submit" 
+        expand="block" 
+        [disabled]="courseForm.invalid || isSubmitting">
+        <ion-spinner *ngIf="isSubmitting" name="crescent"></ion-spinner>
+        {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update Course' : 'Add Course') }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

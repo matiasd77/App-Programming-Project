@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Students</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addStudent()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="search-container">
+    <app-search-bar 
+      placeholder="Search students..." 
+      (search)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <div class="content-container">
+    <div class="grid-container">
+      <ion-card *ngFor="let student of students" class="student-card">
+        <ion-card-header>
+          <ion-card-title>{{ student.firstName }} {{ student.lastName }}</ion-card-title>
+          <ion-card-subtitle>Serial: {{ student.serialNumber }}</ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="student-info">
+            <p *ngIf="student.course">
+              <strong>Course:</strong> {{ student.course.title }}
+            </p>
+            <p *ngIf="!student.course" class="no-course">
+              <ion-icon name="alert-circle"></ion-icon>
+              No course assigned
+            </p>
+          </div>
+        </ion-card-content>
+
+        <ion-footer>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button fill="clear" (click)="editStudent(student)">
+                <ion-icon name="create"></ion-icon>
+                Edit
+              </ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" color="danger" (click)="deleteStudent(student)">
+                <ion-icon name="trash"></ion-icon>
+                Delete
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
+      </ion-card>
+    </div>
+
+    <div *ngIf="students.length === 0 && !isLoading" class="empty-state">
+      <ion-icon name="people-outline" size="large"></ion-icon>
+      <h3>No students found</h3>
+      <p>Add your first student to get started</p>
+      <ion-button (click)="addStudent()">Add Student</ion-button>
+    </div>
+
+    <div *ngIf="isLoading && students.length === 0" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading students...</p>
+    </div>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more students...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content> 

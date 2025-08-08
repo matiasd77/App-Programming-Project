@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Courses</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addCourse()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="search-container">
+    <app-search-bar 
+      placeholder="Search courses..." 
+      (search)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <div class="content-container">
+    <div class="grid-container">
+      <ion-card *ngFor="let course of courses" class="course-card">
+        <ion-card-header>
+          <ion-card-title>{{ course.title }}</ion-card-title>
+          <ion-card-subtitle>{{ course.code }} - {{ course.year }}</ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="course-info">
+            <p class="description">{{ course.description }}</p>
+            
+            <div class="relationships">
+              <p *ngIf="course.teacher">
+                <strong>Teacher:</strong> {{ course.teacher.firstName }} {{ course.teacher.lastName }}
+              </p>
+              <p *ngIf="!course.teacher" class="no-teacher">
+                <ion-icon name="alert-circle"></ion-icon>
+                No teacher assigned
+              </p>
+              
+              <p *ngIf="course.students && course.students.length > 0">
+                <strong>Students:</strong> {{ course.students.length }} student(s)
+              </p>
+              <p *ngIf="!course.students || course.students.length === 0" class="no-students">
+                <ion-icon name="alert-circle"></ion-icon>
+                No students enrolled
+              </p>
+            </div>
+          </div>
+        </ion-card-content>
+
+        <ion-footer>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button fill="clear" (click)="editCourse(course)">
+                <ion-icon name="create"></ion-icon>
+                Edit
+              </ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" color="danger" (click)="deleteCourse(course)">
+                <ion-icon name="trash"></ion-icon>
+                Delete
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
+      </ion-card>
+    </div>
+
+    <div *ngIf="courses.length === 0 && !isLoading" class="empty-state">
+      <ion-icon name="library-outline" size="large"></ion-icon>
+      <h3>No courses found</h3>
+      <p>Add your first course to get started</p>
+      <ion-button (click)="addCourse()">Add Course</ion-button>
+    </div>
+
+    <div *ngIf="isLoading && courses.length === 0" class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading courses...</p>
+    </div>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more courses...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content> 

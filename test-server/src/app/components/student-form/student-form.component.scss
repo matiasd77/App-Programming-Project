@@ -1,0 +1,19 @@
+.error-message {
+  color: var(--ion-color-danger);
+  font-size: 0.8rem;
+  margin: 4px 16px;
+  padding: 4px 0;
+}
+
+.form-actions {
+  margin-top: 24px;
+  padding: 0 16px;
+}
+
+ion-item {
+  margin-bottom: 8px;
+}
+
+ion-label {
+  font-weight: 500;
+} 
