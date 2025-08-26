@@ -13,4 +13,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             String firstName,
             String lastName,
             Pageable pageable);
+            
+    Slice<Student> findByFirstNameContainsOrLastNameContainsOrEmailContains(
+            String firstName,
+            String lastName,
+            String email,
+            Pageable pageable);
 }

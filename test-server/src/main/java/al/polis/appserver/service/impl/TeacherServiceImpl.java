@@ -5,21 +5,25 @@ import al.polis.appserver.communication.ServerErrorEnum;
 import al.polis.appserver.dto.*;
 import al.polis.appserver.exception.TestServerRuntimeException;
 import al.polis.appserver.mapper.TeacherMapper;
+import al.polis.appserver.model.Course;
 import al.polis.appserver.model.Student;
 import al.polis.appserver.model.Teacher;
 import al.polis.appserver.repo.CourseRepository;
 import al.polis.appserver.repo.TeacherRepository;
 import al.polis.appserver.service.TeacherService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
@@ -27,6 +31,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherMapper teacherMapper;
 
     @Override
+    @Transactional
     public TeacherDto upsertTeacher(TeacherDto teacher) {
         if (teacher == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_MISSING);
@@ -65,24 +70,35 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    @Transactional
     public void deleteTeacher(LongIdDto teacherId) {
         if (teacherId == null || teacherId.getId() == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_MISSING);
-            throw new TestServerRuntimeException("Teacher id is null " + teacherId);
+            throw new TestServerRuntimeException("Teacher id is null or missing");
         }
 
+        // Check if teacher exists
         Teacher teacher = teacherRepository.findById(teacherId.getId()).orElse(null);
         if (teacher == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_NOT_FOUND);
-            throw new TestServerRuntimeException("Teacher id not found " + teacherId);
+            throw new TestServerRuntimeException("Teacher with id " + teacherId.getId() + " not found");
         }
 
-        if (teacher.getCourses() != null && !teacher.getCourses().isEmpty()) {
+        // Check if teacher has any courses by querying the courses table
+        List<Course> teacherCourses = courseRepository.findByTeacher_Id(teacherId.getId());
+        if (teacherCourses != null && !teacherCourses.isEmpty()) {
             ErrorContext.addStatusMessage(ServerErrorEnum.DELETE_TEACHER_NOT_ALLOWED);
-            throw new TestServerRuntimeException("Teacher has a course and cannot be deleted.");
+            throw new TestServerRuntimeException("Teacher has " + teacherCourses.size() + " course(s) and cannot be deleted. Please remove all course assignments first.");
         }
 
-        teacherRepository.delete(teacher);
+        // If we reach here, it's safe to delete the teacher
+        try {
+            teacherRepository.delete(teacher);
+        } catch (Exception ex) {
+            log.error("Error deleting teacher with ID {}: {}", teacherId.getId(), ex.getMessage());
+            ErrorContext.addStatusMessage(ServerErrorEnum.DELETE_TEACHER_NOT_ALLOWED);
+            throw new TestServerRuntimeException("Failed to delete teacher due to database constraint: " + ex.getMessage());
+        }
     }
 
     @Override

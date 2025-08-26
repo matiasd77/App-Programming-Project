@@ -7,7 +7,6 @@ import al.polis.appserver.exception.TestServerRuntimeException;
 import al.polis.appserver.mapper.StudentMapper;
 import al.polis.appserver.model.Course;
 import al.polis.appserver.model.Student;
-import al.polis.appserver.model.Teacher;
 import al.polis.appserver.repo.CourseRepository;
 import al.polis.appserver.repo.StudentRepository;
 import al.polis.appserver.service.StudentService;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentMapper studentMapper;
 
     @Override
+    @Transactional
     public StudentDto upsertStudent(StudentDto student) {
         if (student == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_MISSING);
@@ -53,7 +54,8 @@ public class StudentServiceImpl implements StudentService {
         } else {
             criterion = filter.getFilter();
             students = studentRepository
-                    .findByFirstNameContainsOrLastNameContains(
+                    .findByFirstNameContainsOrLastNameContainsOrEmailContains(
+                            criterion,
                             criterion,
                             criterion,
                             PageRequest.of(
@@ -67,6 +69,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void deleteStudent(LongIdDto studentId) {
         if (studentId == null || studentId.getId() == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_MISSING);
@@ -76,11 +79,11 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findById(studentId.getId()).orElse(null);
         if (student == null) {
             ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_NOT_FOUND);
-            throw new TestServerRuntimeException("Course id not found " + studentId);
+            throw new TestServerRuntimeException("Student id not found " + studentId);
         }
 
         if (student.getCourse() != null) {
-            ErrorContext.addStatusMessage(ServerErrorEnum.DELETE_COURSE_NOT_ALLOWED);
+            ErrorContext.addStatusMessage(ServerErrorEnum.DELETE_STUDENT_NOT_ALLOWED);
             throw new TestServerRuntimeException("Student has a course and cannot be deleted.");
         }
 
@@ -88,6 +91,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void associateStudentToCourse(CourseStudentAssocDto assoc) {
         Long courseId = assoc.getIdCourse();
         Long studentId = assoc.getIdStudent();
@@ -104,14 +108,14 @@ public class StudentServiceImpl implements StudentService {
         }
 
         if (studentId == null) {
-            ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_MISSING);
-            throw new TestServerRuntimeException("Teacher id is null " + courseId);
+            ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_MISSING);
+            throw new TestServerRuntimeException("Student id is null " + courseId);
         }
 
         Student student = studentRepository.findById(studentId).orElse(null);
         if (student == null) {
-            ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_NOT_FOUND);
-            throw new TestServerRuntimeException("Teacher id not found " + courseId);
+            ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_NOT_FOUND);
+            throw new TestServerRuntimeException("Student id not found " + courseId);
         }
 
         student.setCourse(course);
@@ -129,6 +133,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional
     public void removeStudentFromCourse(CourseStudentAssocDto assoc) {
         Long courseId = assoc.getIdCourse();
         Long studentId = assoc.getIdStudent();
@@ -145,8 +150,8 @@ public class StudentServiceImpl implements StudentService {
         }
 
         if (studentId == null) {
-            ErrorContext.addStatusMessage(ServerErrorEnum.TEACHER_MISSING);
-            throw new TestServerRuntimeException("Teacher id is null " + courseId);
+            ErrorContext.addStatusMessage(ServerErrorEnum.STUDENT_MISSING);
+            throw new TestServerRuntimeException("Student id is null " + courseId);
         }
 
         Student student = studentRepository.findById(studentId).orElse(null);
@@ -160,9 +165,6 @@ public class StudentServiceImpl implements StudentService {
         List<Student> list = course.getStudents();
         if (list != null) {
             list.removeIf(s -> s != null && s.getId().equals(studentId));
-        } else {
-            list = new ArrayList<>();
-            course.setStudents(list);
         }
         courseRepository.save(course);
     }

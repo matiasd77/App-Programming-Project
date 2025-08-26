@@ -31,8 +31,8 @@ export class CourseService extends ApiService {
   }
 
   // Delete a course
-  deleteCourse(request: LongIdDto): Observable<RespSingleDto<CourseDto>> {
-    return this.post<RespSingleDto<CourseDto>>('/course/delete', request);
+  deleteCourse(id: number): Observable<RespSingleDto<void>> {
+    return this.delete<RespSingleDto<void>>(`/course/${id}`);
   }
 
   // Associate student to course

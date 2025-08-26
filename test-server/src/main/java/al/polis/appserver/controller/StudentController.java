@@ -83,21 +83,23 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/student/delete")
-    @ResponseBody
-    public ResponseEntity<RespSingleDto<Void>> deleteStudent(@RequestBody LongIdDto studentId) {
-        log.info("Delete student request received: {}", studentId);
+    @DeleteMapping("/student/{id}")
+    public ResponseEntity<RespSingleDto<Void>> deleteStudent(@PathVariable Long id) {
+        log.info("Delete student request received for ID: {}", id);
         
         try {
             // Validate input
-            if (studentId == null || studentId.getId() == null) {
+            if (id == null) {
                 log.error("Student ID is null");
                 return ResponseEntity.badRequest()
                     .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             }
             
+            LongIdDto studentId = new LongIdDto();
+            studentId.setId(id);
+            
             studentService.deleteStudent(studentId);
-            log.info("Student deleted successfully with ID: {}", studentId.getId());
+            log.info("Student deleted successfully with ID: {}", id);
             return ResponseEntity.ok(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             
         } catch (Exception ex) {

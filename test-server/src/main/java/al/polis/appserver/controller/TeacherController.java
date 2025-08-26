@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import al.polis.appserver.exception.TestServerRuntimeException;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:8100", "http://localhost:4200"}, allowCredentials = "false")
@@ -79,25 +80,43 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("/teacher/delete")
-    @ResponseBody
-    public ResponseEntity<RespSingleDto<Void>> deleteTeacher(@RequestBody LongIdDto teacherId) {
-        log.info("Delete teacher request received: {}", teacherId);
+    @DeleteMapping("/teacher/{id}")
+    public ResponseEntity<RespSingleDto<Void>> deleteTeacher(@PathVariable Long id) {
+        log.info("Delete teacher request received for ID: {}", id);
         
         try {
             // Validate input
-            if (teacherId == null || teacherId.getId() == null) {
+            if (id == null) {
                 log.error("Teacher ID is null");
                 return ResponseEntity.badRequest()
                     .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             }
             
+            LongIdDto teacherId = new LongIdDto();
+            teacherId.setId(id);
+            
             teacherService.deleteTeacher(teacherId);
-            log.info("Teacher deleted successfully with ID: {}", teacherId.getId());
+            log.info("Teacher deleted successfully with ID: {}", id);
             return ResponseEntity.ok(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             
+        } catch (TestServerRuntimeException ex) {
+            log.error("Business logic error deleting teacher: {}", ex.getMessage());
+            
+            // Check the specific error type and return appropriate HTTP status
+            if (ex.getMessage().contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
+            } else if (ex.getMessage().contains("cannot be deleted") || 
+                       ex.getMessage().contains("has courses")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
+            }
+            
         } catch (Exception ex) {
-            log.error("Error deleting teacher: {}", ex.getMessage(), ex);
+            log.error("Unexpected error deleting teacher: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
         }

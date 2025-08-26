@@ -23,6 +23,16 @@ export class ApiService {
       );
   }
 
+  protected delete<T>(endpoint: string): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}${endpoint}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.log('API Error:', error);
+          return this.handleError(error);
+        })
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.log('handleError called with:', error);
     console.log('error.status:', error.status);

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Polis University</string>
+    <string name="students">Students</string>
+    <string name="teachers">Teachers</string>
+    <string name="courses">Courses</string>
+    <string name="add_student">Add Student</string>
+    <string name="edit_student">Edit Student</string>
+    <string name="delete_student">Delete Student</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="refresh">Refresh</string>
+    <string name="no_students_found">No students found</string>
+    <string name="add_first_student">Add your first student to get started</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="teachers_management">Teachers Management</string>
+    <string name="courses_management">Courses Management</string>
+    <string name="feature_implementation">This feature will be implemented\nfollowing the same pattern as Students</string>
+</resources>

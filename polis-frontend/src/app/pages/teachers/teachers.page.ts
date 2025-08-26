@@ -129,9 +129,7 @@ export class TeachersPage implements OnInit {
   }
 
   private performDelete(teacherId: number) {
-    const request: LongIdDto = { id: teacherId };
-    
-    this.teacherService.deleteTeacher(request).subscribe({
+    this.teacherService.deleteTeacher(teacherId).subscribe({
       next: () => {
         this.loadTeachers(true);
         this.showToast('Teacher deleted successfully');

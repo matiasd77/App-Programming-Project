@@ -78,21 +78,23 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/course/delete")
-    @ResponseBody
-    public ResponseEntity<RespSingleDto<Void>> deleteCourse(@RequestBody LongIdDto courseId) {
-        log.info("Delete course request received: {}", courseId);
+    @DeleteMapping("/course/{id}")
+    public ResponseEntity<RespSingleDto<Void>> deleteCourse(@PathVariable Long id) {
+        log.info("Delete course request received for ID: {}", id);
         
         try {
             // Validate input
-            if (courseId == null || courseId.getId() == null) {
+            if (id == null) {
                 log.error("Course ID is null");
                 return ResponseEntity.badRequest()
                     .body(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             }
             
+            LongIdDto courseId = new LongIdDto();
+            courseId.setId(id);
+            
             courseService.deleteCourse(courseId);
-            log.info("Course deleted successfully with ID: {}", courseId.getId());
+            log.info("Course deleted successfully with ID: {}", id);
             return ResponseEntity.ok(new RespSingleDto<>(null, ErrorContext.readAndClean()));
             
         } catch (Exception ex) {

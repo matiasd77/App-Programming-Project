@@ -7,6 +7,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Slice<Course> findByCodeContainsOrTitleContainsOrDescriptionContains(
@@ -14,4 +16,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             String title,
             String description,
             Pageable pageable);
+            
+    List<Course> findByTeacher_Id(Long teacherId);
 }

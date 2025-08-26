@@ -127,9 +127,7 @@ export class CoursesPage implements OnInit {
   }
 
   private performDelete(courseId: number) {
-    const request: LongIdDto = { id: courseId };
-    
-    this.courseService.deleteCourse(request).subscribe({
+    this.courseService.deleteCourse(courseId).subscribe({
       next: () => {
         this.loadCourses(true);
         this.showToast('Course deleted successfully');

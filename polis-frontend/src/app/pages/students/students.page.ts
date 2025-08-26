@@ -132,9 +132,7 @@ export class StudentsPage implements OnInit {
   }
 
   private performDelete(studentId: number) {
-    const request: LongIdDto = { id: studentId };
-    
-    this.studentService.deleteStudent(request).subscribe({
+    this.studentService.deleteStudent(studentId).subscribe({
       next: () => {
         this.loadStudents(true);
         this.showToast('Student deleted successfully');

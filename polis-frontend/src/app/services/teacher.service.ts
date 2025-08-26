@@ -39,8 +39,8 @@ export class TeacherService extends ApiService {
   }
 
   // Delete a teacher
-  deleteTeacher(request: LongIdDto): Observable<RespSingleDto<TeacherDto>> {
-    return this.post<RespSingleDto<TeacherDto>>('/teacher/delete', request);
+  deleteTeacher(id: number): Observable<RespSingleDto<void>> {
+    return this.delete<RespSingleDto<void>>(`/teacher/${id}`);
   }
 
   // Associate teacher to course
