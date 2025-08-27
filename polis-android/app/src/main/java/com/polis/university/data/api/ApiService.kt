@@ -18,12 +18,12 @@ interface ApiService {
     @DELETE("student/{id}")
     suspend fun deleteStudent(@Path("id") id: Int): ApiResponse<Unit>
     
-    // Teacher endpoints (placeholders for future implementation)
+    // Teacher endpoints
     @POST("teacher/filter")
-    suspend fun filterTeachers(@Body filter: StudentFilter): TeacherListResponse
+    suspend fun filterTeachers(@Body filter: TeacherFilter): TeacherListResponse
     
     @POST("teacher/get")
-    suspend fun getTeacher(@Body request: StudentIdRequest): ApiResponse<TeacherDto>
+    suspend fun getTeacher(@Body request: TeacherIdRequest): ApiResponse<TeacherDto>
     
     @POST("teacher/upsert")
     suspend fun upsertTeacher(@Body teacher: TeacherDto): ApiResponse<TeacherDto>
@@ -31,12 +31,12 @@ interface ApiService {
     @DELETE("teacher/{id}")
     suspend fun deleteTeacher(@Path("id") id: Int): ApiResponse<Unit>
     
-    // Course endpoints (placeholders for future implementation)
+    // Course endpoints
     @POST("course/filter")
-    suspend fun filterCourses(@Body filter: StudentFilter): CourseListResponse
+    suspend fun filterCourses(@Body filter: CourseFilter): CourseListResponse
     
     @POST("course/get")
-    suspend fun getCourse(@Body request: StudentIdRequest): ApiResponse<CourseDto>
+    suspend fun getCourse(@Body request: CourseIdRequest): ApiResponse<CourseDto>
     
     @POST("course/upsert")
     suspend fun upsertCourse(@Body course: CourseDto): ApiResponse<CourseDto>
@@ -47,6 +47,8 @@ interface ApiService {
 
 // Request DTOs
 data class StudentIdRequest(val id: Int)
+data class TeacherIdRequest(val id: Int)
+data class CourseIdRequest(val id: Int)
 
 // Response DTOs for Teachers and Courses (placeholders)
 data class TeacherListResponse(

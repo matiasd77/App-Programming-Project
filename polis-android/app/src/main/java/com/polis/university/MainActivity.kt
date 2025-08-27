@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PolisUniversityApp()
+                    PolisUniversityAppContent()
                 }
             }
         }
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PolisUniversityApp() {
+fun PolisUniversityAppContent() {
     val navController = rememberNavController()
     
     Scaffold(
@@ -63,7 +63,7 @@ fun PolisUniversityApp() {
                     NavigationItem(
                         route = "courses",
                         title = "Courses",
-                        icon = Icons.Default.Library
+                        icon = Icons.Default.School
                     )
                 ).forEach { item ->
                     NavigationBarItem(
@@ -108,12 +108,42 @@ fun PolisUniversityApp() {
                 )
             }
             
+            composable("teacher_form") {
+                TeacherFormScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            
+            composable("course_form") {
+                CourseFormScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            
             composable("teachers") {
-                TeacherListScreen()
+                TeacherListScreen(
+                    onNavigateToAdd = {
+                        navController.navigate("teacher_form")
+                    },
+                    onNavigateToEdit = { teacher ->
+                        navController.navigate("teacher_form?teacherId=${teacher.id}")
+                    }
+                )
             }
             
             composable("courses") {
-                CourseListScreen()
+                CourseListScreen(
+                    onNavigateToAdd = {
+                        navController.navigate("course_form")
+                    },
+                    onNavigateToEdit = { course ->
+                        navController.navigate("course_form?courseId=${course.id}")
+                    }
+                )
             }
         }
     }

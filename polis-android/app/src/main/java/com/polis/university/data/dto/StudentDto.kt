@@ -82,3 +82,16 @@ data class Sorting(
     val field: String,
     val direction: String // "ASC" or "DESC"
 )
+
+// Teacher and Course Filter DTOs
+data class TeacherFilter(
+    val filter: String? = null,
+    val pagination: Pagination,
+    val sorting: Sorting? = null
+)
+
+data class CourseFilter(
+    val filter: String? = null,
+    val pagination: Pagination,
+    val sorting: Sorting? = null
+)
