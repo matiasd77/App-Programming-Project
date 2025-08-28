@@ -83,7 +83,7 @@ class StudentListViewModel @Inject constructor(
     fun searchStudents(query: String) {
         val filter = StudentFilter(
             filter = query.takeIf { it.isNotBlank() },
-            pagination = Pagination(0, 20)
+            pagination = Pagination(0, 200)
         )
         
         viewModelScope.launch {

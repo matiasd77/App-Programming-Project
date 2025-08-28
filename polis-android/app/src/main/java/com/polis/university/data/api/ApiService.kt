@@ -53,7 +53,7 @@ data class CourseIdRequest(val id: Int)
 // Response DTOs for Teachers and Courses (placeholders)
 data class TeacherListResponse(
     val slice: TeacherSlice,
-    val status: ApiStatus,
+    val status: List<ServerStatusDto>,
     val error: ApiError? = null
 )
 
@@ -65,7 +65,7 @@ data class TeacherSlice(
 
 data class CourseListResponse(
     val slice: CourseSlice,
-    val status: ApiStatus,
+    val status: List<ServerStatusDto>,
     val error: ApiError? = null
 )
 

@@ -1,7 +1,11 @@
 package com.polis.university.data.repository
 
 import com.polis.university.data.api.ApiService
+import com.polis.university.data.api.CourseIdRequest
+import com.polis.university.data.api.CourseListResponse
 import com.polis.university.data.api.StudentIdRequest
+import com.polis.university.data.api.TeacherIdRequest
+import com.polis.university.data.api.TeacherListResponse
 import com.polis.university.data.dto.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,7 +18,7 @@ class StudentRepository @Inject constructor(
 ) {
     
     fun getStudents(filter: StudentFilter = StudentFilter(
-        pagination = Pagination(0, 20)
+        pagination = Pagination(0, 200)
     )): Flow<Result<StudentListResponse>> = flow {
         try {
             val response = apiService.filterStudents(filter)

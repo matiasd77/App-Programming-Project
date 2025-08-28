@@ -57,6 +57,23 @@ class StudentFormViewModel @Inject constructor(
         }
     }
     
+    fun loadStudentById(studentId: Int) {
+        viewModelScope.launch {
+            studentRepository.getStudent(studentId).collect { result ->
+                result.fold(
+                    onSuccess = { student ->
+                        setStudentForEdit(student)
+                    },
+                    onFailure = { exception ->
+                        _uiState.value = _uiState.value.copy(
+                            error = exception.message ?: "Failed to load student"
+                        )
+                    }
+                )
+            }
+        }
+    }
+    
     fun saveStudent(onSuccess: () -> Unit) {
         if (!validateForm()) {
             return

@@ -34,13 +34,17 @@ data class TeacherDto(
 // API Response DTOs
 data class ApiResponse<T>(
     val data: T,
-    val status: ApiStatus,
+    val status: List<ServerStatusDto>,
     val error: ApiError? = null
 )
 
-data class ApiStatus(
-    val code: Int,
-    val message: String
+data class ServerStatusDto(
+    val code: String? = null,
+    val severity: String? = null,
+    val message: String? = null,
+    val action: String? = null,
+    val helpReference: String? = null,
+    val traceId: String? = null
 )
 
 data class ApiError(
@@ -51,7 +55,7 @@ data class ApiError(
 
 data class StudentListResponse(
     val slice: StudentSlice,
-    val status: ApiStatus,
+    val status: List<ServerStatusDto>,
     val error: ApiError? = null
 )
 

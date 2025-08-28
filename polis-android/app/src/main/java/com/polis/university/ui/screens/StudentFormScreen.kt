@@ -22,13 +22,18 @@ import com.polis.university.viewmodel.StudentFormViewModel
 @Composable
 fun StudentFormScreen(
     student: StudentDto? = null,
+    studentId: Int? = null,
     onNavigateBack: () -> Unit,
     viewModel: StudentFormViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     
-    LaunchedEffect(student) {
-        viewModel.setStudentForEdit(student)
+    LaunchedEffect(student, studentId) {
+        if (student != null) {
+            viewModel.setStudentForEdit(student)
+        } else if (studentId != null) {
+            viewModel.loadStudentById(studentId)
+        }
     }
     
     LaunchedEffect(Unit) {

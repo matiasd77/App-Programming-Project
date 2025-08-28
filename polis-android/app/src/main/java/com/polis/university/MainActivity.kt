@@ -107,6 +107,14 @@ fun PolisUniversityAppContent() {
                     }
                 )
             }
+
+            composable("student_form?studentId={studentId}") { backStackEntry ->
+                val studentId = backStackEntry.arguments?.getString("studentId")?.toIntOrNull()
+                StudentFormScreen(
+                    studentId = studentId,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
             
             composable("teacher_form") {
                 TeacherFormScreen(

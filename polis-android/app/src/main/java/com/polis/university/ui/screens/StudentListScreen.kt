@@ -99,13 +99,18 @@ private fun StudentList(
     ) {
         items(
             items = students,
-            key = { it.id ?: 0 }
+            key = { (it.id ?: it.hashCode()) }
         ) { student ->
             StudentCard(
                 student = student,
                 onEdit = { onEdit(student) },
                 onDelete = { onDelete(student) }
             )
+        }
+
+        // simple pagination trigger: add a spacer as the last item which can be observed
+        item {
+            Spacer(modifier = Modifier.height(1.dp))
         }
     }
 }
