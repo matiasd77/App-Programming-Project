@@ -96,7 +96,7 @@ class TeacherFormViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isSuccess = false)
     }
     
-    fun loadTeacher(id: Int) {
+    fun loadTeacherById(id: Int) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             

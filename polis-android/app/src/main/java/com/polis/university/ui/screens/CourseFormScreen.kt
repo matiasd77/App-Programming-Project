@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,10 +16,17 @@ import com.polis.university.viewmodel.CourseFormViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseFormScreen(
+    courseId: Int? = null,
     onNavigateBack: () -> Unit
 ) {
     val viewModel: CourseFormViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    LaunchedEffect(courseId) {
+        if (courseId != null) {
+            viewModel.loadCourse(courseId)
+        }
+    }
     
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
@@ -108,7 +114,7 @@ fun CourseFormScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(if (uiState.isSaving) "Saving..." else "Save Course")
+                Text(if (uiState.isSaving) "Saving..." else if (uiState.courseId != null) "Update Course" else "Save Course")
             }
             
             if (uiState.error != null) {

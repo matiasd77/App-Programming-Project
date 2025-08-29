@@ -16,10 +16,17 @@ import com.polis.university.viewmodel.TeacherFormViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeacherFormScreen(
+    teacherId: Int? = null,
     onNavigateBack: () -> Unit
 ) {
     val viewModel: TeacherFormViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    LaunchedEffect(teacherId) {
+        if (teacherId != null) {
+            viewModel.loadTeacherById(teacherId)
+        }
+    }
     
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
@@ -99,7 +106,7 @@ fun TeacherFormScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(if (uiState.isSaving) "Saving..." else "Save Teacher")
+                Text(if (uiState.isSaving) "Saving..." else if (uiState.teacherId != null) "Update Teacher" else "Save Teacher")
             }
             
             if (uiState.error != null) {

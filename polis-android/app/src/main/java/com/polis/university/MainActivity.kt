@@ -51,6 +51,11 @@ fun PolisUniversityAppContent() {
                 
                 listOf(
                     NavigationItem(
+                        route = "home",
+                        title = "Home",
+                        icon = Icons.Default.Home
+                    ),
+                    NavigationItem(
                         route = "students",
                         title = "Students",
                         icon = Icons.Default.People
@@ -71,11 +76,15 @@ fun PolisUniversityAppContent() {
                         label = { Text(item.title) },
                         selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                         onClick = {
+                            // Navigate to the selected tab
                             navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
+                                // Pop up to the start destination (home) to avoid building up a large stack
+                                popUpTo("home") {
                                     saveState = true
                                 }
+                                // Avoid multiple copies of the same destination
                                 launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
                                 restoreState = true
                             }
                         }
@@ -86,9 +95,44 @@ fun PolisUniversityAppContent() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = "students",
+            startDestination = "home",
             modifier = Modifier.padding(paddingValues)
         ) {
+            composable("home") {
+                HomeScreen(
+                    onNavigateToStudents = {
+                        // Navigate to students tab using the same logic as bottom navigation
+                        navController.navigate("students") {
+                            popUpTo("home") {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToTeachers = {
+                        // Navigate to teachers tab using the same logic as bottom navigation
+                        navController.navigate("teachers") {
+                            popUpTo("home") {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToCourses = {
+                        // Navigate to courses tab using the same logic as bottom navigation
+                        navController.navigate("courses") {
+                            popUpTo("home") {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+            
             composable("students") {
                 StudentListScreen(
                     onNavigateToAdd = {
@@ -124,11 +168,29 @@ fun PolisUniversityAppContent() {
                 )
             }
             
+            // Add the missing teacher edit route
+            composable("teacher_form?teacherId={teacherId}") { backStackEntry ->
+                val teacherId = backStackEntry.arguments?.getString("teacherId")?.toIntOrNull()
+                TeacherFormScreen(
+                    teacherId = teacherId,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
             composable("course_form") {
                 CourseFormScreen(
                     onNavigateBack = {
                         navController.popBackStack()
                     }
+                )
+            }
+            
+            // Add the missing course edit route
+            composable("course_form?courseId={courseId}") { backStackEntry ->
+                val courseId = backStackEntry.arguments?.getString("courseId")?.toIntOrNull()
+                CourseFormScreen(
+                    courseId = courseId,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
             
