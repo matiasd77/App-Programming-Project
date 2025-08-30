@@ -1,3 +1,5 @@
+// Main Activity for Polis University Android Application - Handles navigation and main app structure
+
 package com.polis.university
 
 import android.os.Bundle
@@ -21,16 +23,24 @@ import com.polis.university.ui.screens.*
 import com.polis.university.ui.theme.PolisUniversityTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+// Main Activity class that serves as the entry point for the user interface
+@AndroidEntryPoint // Enables Hilt dependency injection for this activity
 class MainActivity : ComponentActivity() {
+    
+    // Called when the activity is first created - sets up the main UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState) // Call parent class onCreate method
+        
+        // Set the content using Jetpack Compose instead of traditional XML layouts
         setContent {
+            // Apply the Polis University theme to all child composables
             PolisUniversityTheme {
+                // Create a surface that fills the entire screen with background color
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), // Make surface fill entire available space
+                    color = MaterialTheme.colorScheme.background // Use theme background color
                 ) {
+                    // Display the main app content with navigation
                     PolisUniversityAppContent()
                 }
             }
@@ -38,49 +48,56 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+// Main composable function that sets up the app's navigation structure and bottom navigation
+@OptIn(ExperimentalMaterial3Api::class) // Allow use of experimental Material3 components
 @Composable
 fun PolisUniversityAppContent() {
+    // Create a navigation controller to manage screen transitions
     val navController = rememberNavController()
     
+    // Create the main app scaffold with bottom navigation bar
     Scaffold(
         bottomBar = {
+            // Bottom navigation bar with tabs for different app sections
             NavigationBar {
+                // Get current navigation state to highlight active tab
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
                 
+                // Define the navigation items for the bottom bar
                 listOf(
                     NavigationItem(
-                        route = "home",
-                        title = "Home",
-                        icon = Icons.Default.Home
+                        route = "home", // Navigation route identifier
+                        title = "Home", // Display text for the tab
+                        icon = Icons.Default.Home // Icon to display for the tab
                     ),
                     NavigationItem(
-                        route = "students",
-                        title = "Students",
-                        icon = Icons.Default.People
+                        route = "students", // Route to students section
+                        title = "Students", // Display text for students tab
+                        icon = Icons.Default.People // People icon for students
                     ),
                     NavigationItem(
-                        route = "teachers",
-                        title = "Teachers",
-                        icon = Icons.Default.Person
+                        route = "teachers", // Route to teachers section
+                        title = "Teachers", // Display text for teachers tab
+                        icon = Icons.Default.Person // Person icon for teachers
                     ),
                     NavigationItem(
-                        route = "courses",
-                        title = "Courses",
-                        icon = Icons.Default.School
+                        route = "courses", // Route to courses section
+                        title = "Courses", // Display text for courses tab
+                        icon = Icons.Default.School // School icon for courses
                     )
                 ).forEach { item ->
+                    // Create each navigation bar item
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.title) },
-                        label = { Text(item.title) },
-                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                        icon = { Icon(item.icon, contentDescription = item.title) }, // Display the icon
+                        label = { Text(item.title) }, // Display the tab title
+                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true, // Highlight if this tab is active
                         onClick = {
-                            // Navigate to the selected tab
+                            // Navigate to the selected tab when clicked
                             navController.navigate(item.route) {
                                 // Pop up to the start destination (home) to avoid building up a large stack
                                 popUpTo("home") {
-                                    saveState = true
+                                    saveState = true // Save the current state
                                 }
                                 // Avoid multiple copies of the same destination
                                 launchSingleTop = true
@@ -93,11 +110,13 @@ fun PolisUniversityAppContent() {
             }
         }
     ) { paddingValues ->
+        // Navigation host that manages all the different screens
         NavHost(
-            navController = navController,
-            startDestination = "home",
-            modifier = Modifier.padding(paddingValues)
+            navController = navController, // Use the navigation controller we created
+            startDestination = "home", // Start with the home screen
+            modifier = Modifier.padding(paddingValues) // Apply padding from the scaffold
         ) {
+            // Define the home screen route
             composable("home") {
                 HomeScreen(
                     onNavigateToStudents = {
@@ -133,33 +152,37 @@ fun PolisUniversityAppContent() {
                 )
             }
             
+            // Define the students list screen route
             composable("students") {
                 StudentListScreen(
                     onNavigateToAdd = {
-                        navController.navigate("student_form")
+                        navController.navigate("student_form") // Navigate to add student form
                     },
                     onNavigateToEdit = { student ->
-                        navController.navigate("student_form?studentId=${student.id}")
+                        navController.navigate("student_form?studentId=${student.id}") // Navigate to edit form with student ID
                     }
                 )
             }
             
+            // Define the add student form route
             composable("student_form") {
                 StudentFormScreen(
                     onNavigateBack = {
-                        navController.popBackStack()
+                        navController.popBackStack() // Go back to previous screen
                     }
                 )
             }
 
+            // Define the edit student form route with student ID parameter
             composable("student_form?studentId={studentId}") { backStackEntry ->
-                val studentId = backStackEntry.arguments?.getString("studentId")?.toIntOrNull()
+                val studentId = backStackEntry.arguments?.getString("studentId")?.toIntOrNull() // Extract student ID from route
                 StudentFormScreen(
-                    studentId = studentId,
+                    studentId = studentId, // Pass the student ID for editing
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
             
+            // Define the add teacher form route
             composable("teacher_form") {
                 TeacherFormScreen(
                     onNavigateBack = {
@@ -168,15 +191,16 @@ fun PolisUniversityAppContent() {
                 )
             }
             
-            // Add the missing teacher edit route
+            // Define the edit teacher form route with teacher ID parameter
             composable("teacher_form?teacherId={teacherId}") { backStackEntry ->
-                val teacherId = backStackEntry.arguments?.getString("teacherId")?.toIntOrNull()
+                val teacherId = backStackEntry.arguments?.getString("teacherId")?.toIntOrNull() // Extract teacher ID from route
                 TeacherFormScreen(
-                    teacherId = teacherId,
+                    teacherId = teacherId, // Pass the teacher ID for editing
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
             
+            // Define the add course form route
             composable("course_form") {
                 CourseFormScreen(
                     onNavigateBack = {
@@ -185,33 +209,35 @@ fun PolisUniversityAppContent() {
                 )
             }
             
-            // Add the missing course edit route
+            // Define the edit course form route with course ID parameter
             composable("course_form?courseId={courseId}") { backStackEntry ->
-                val courseId = backStackEntry.arguments?.getString("courseId")?.toIntOrNull()
+                val courseId = backStackEntry.arguments?.getString("courseId")?.toIntOrNull() // Extract course ID from route
                 CourseFormScreen(
-                    courseId = courseId,
+                    courseId = courseId, // Pass the course ID for editing
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
             
+            // Define the teachers list screen route
             composable("teachers") {
                 TeacherListScreen(
                     onNavigateToAdd = {
-                        navController.navigate("teacher_form")
+                        navController.navigate("teacher_form") // Navigate to add teacher form
                     },
                     onNavigateToEdit = { teacher ->
-                        navController.navigate("teacher_form?teacherId=${teacher.id}")
+                        navController.navigate("teacher_form?teacherId=${teacher.id}") // Navigate to edit form with teacher ID
                     }
                 )
             }
             
+            // Define the courses list screen route
             composable("courses") {
                 CourseListScreen(
                     onNavigateToAdd = {
-                        navController.navigate("course_form")
+                        navController.navigate("course_form") // Navigate to add course form
                     },
                     onNavigateToEdit = { course ->
-                        navController.navigate("course_form?courseId=${course.id}")
+                        navController.navigate("course_form?courseId=${course.id}") // Navigate to edit form with course ID
                     }
                 )
             }
@@ -219,8 +245,9 @@ fun PolisUniversityAppContent() {
     }
 }
 
+// Data class representing a navigation item in the bottom navigation bar
 data class NavigationItem(
-    val route: String,
-    val title: String,
-    val icon: ImageVector
+    val route: String, // Navigation route identifier
+    val title: String, // Display text for the navigation item
+    val icon: ImageVector // Icon to display for the navigation item
 )
